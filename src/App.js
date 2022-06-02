@@ -1,23 +1,37 @@
-import logo from './logo.svg';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import React from 'react';
 import './App.css';
+import { Suspense } from 'react';
+import { Spinner } from 'react-bootstrap';
+import { Route,Routes } from 'react-router-dom';
+
+
+
+const Login = React.lazy(()=>import("./Login"))
 
 function App() {
+
+  
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+
+ <Suspense fallback={<div className ="d-flex text-dark justify-content-center ">
+                       <Spinner style={{width: '3rem', height: '3rem'}}/>
+                     </div>}>
+
+ <Routes>
+   <Route path='/' element={<Login/>} />
+ </Routes>
+
+
+ </Suspense>
+
+
+
+
+     
     </div>
   );
 }
