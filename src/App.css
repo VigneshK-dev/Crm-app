@@ -1,4 +1,4 @@
-
+/* login */
 
 .login-section{
   display: grid;
@@ -36,3 +36,21 @@
   justify-content: center;
   align-items: center;
 }
+
+.not-sec{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+}
+
+
+body{
+  background-color: rgb(250, 251, 251);
+}
+
+
+
+
+
