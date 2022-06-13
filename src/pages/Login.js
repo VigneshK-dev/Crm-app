@@ -4,10 +4,13 @@ import { useNavigate } from 'react-router-dom'
 import {Container} from 'reactstrap'
 import {Usersignin, Usersignup} from "../Api/auth"
 
+
+
+
 function Login() {
 
 
-    let navigate = useNavigate()
+let navigate = useNavigate()
 
 
 const [islogin,setlogin] = useState(true)    
@@ -42,6 +45,7 @@ const handleSignin = (e)=>{
              localStorage.setItem('username',response.data.name)
              localStorage.setItem('userId',response.data.userId)
              localStorage.setItem('userTypes',response.data.userTypes)
+             localStorage.setItem('userStatus',response.data.userStatus)
              localStorage.setItem('email',response.data.email)
              localStorage.setItem('token',response.data.accessToken) 
            if(response.data.userTypes === "CUSTOMER"){
@@ -67,12 +71,12 @@ const handleSignup = (e)=>{
       e.preventDefault()
     var data ={userType:user,...signdata}
     Usersignup(data).then(function (response){
-        // console.log(response)
+        console.log(response)
         if(response.status === 201){
             navigate(0);
         }
     }).catch(function(error){
-        // console.log(error)
+        console.log(error)
          if(error.response.status === 400){
              seterrormsg(error.response.data.message)
          }
@@ -84,6 +88,7 @@ const handleSignup = (e)=>{
 const updatesignindata = (e)=>{
   signdata[e.target.id] = e.target.value
   setsigndata(signdata)
+//   console.log(signdata)
 }
 
 
@@ -94,6 +99,7 @@ const toggle = ()=>{
 
 const selected =(e)=>{
     setuser(e)
+    // console.log(user)
 }
 
 

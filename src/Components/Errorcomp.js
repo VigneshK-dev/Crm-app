@@ -7,8 +7,6 @@ import unauth from "../assets/403.svg"
 function Errorcomp({pagetype}) {
 
 
-  console.log(pagetype)
-
     let navigate = useNavigate()
 
     const goback = ()=>{

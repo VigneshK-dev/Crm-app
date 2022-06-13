@@ -1,13 +1,12 @@
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { Suspense } from 'react';
 import { Spinner } from 'react-bootstrap';
 import { Route,Routes } from 'react-router-dom';
 import { RequireAuth } from './Components/RequireAuth';
 import Errorcomp from './Components/Errorcomp';
-import 'bootstrap/dist/css/bootstrap.min.css';
-// import '@coreui/coreui/dist/css/coreui.min.css';
-import "bootstrap/dist/js/bootstrap.bundle.min";
+
 
 
 
@@ -43,9 +42,6 @@ function App() {
 <Routes>
    <Route exact  path='/' element={<Login/>} />
 
-   <Route  path="/unauthorized" element={<Errorcomp pagetype ={pagetype.UNAUTHORIZED}/>} />
-
-   <Route  path= '/*'  element = {<Errorcomp pagetype = {pagetype.NOTFOUND}/>} />
 
   <Route element={<RequireAuth Roles = {[Roles.ADMIN]} />} > 
       <Route exact path='/Admin' element={<Admin/>} />
@@ -59,6 +55,10 @@ function App() {
       <Route exact  path='/Customer' element={<Customer/>} />
   </Route>
 
+
+<Route  path="/unauthorized" element={<Errorcomp pagetype ={pagetype.UNAUTHORIZED}/>} />
+
+<Route  path= '/*'  element = {<Errorcomp pagetype = {pagetype.NOTFOUND}/>} />
    
 
 </Routes>

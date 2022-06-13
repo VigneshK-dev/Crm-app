@@ -1,5 +1,9 @@
 /* login */
 
+@import url('https://fonts.googleapis.com/css2?family=Barlow&family=Roboto+Slab&display=swap');
+
+
+
 .login-section{
   display: grid;
   grid-template-columns: 2fr 3fr;
@@ -45,10 +49,16 @@
   height: 100vh;
 }
 
-
 body{
   background-color: rgb(250, 251, 251);
-}
+  font-family: 'Barlow', sans-serif;
+  font-family: 'Roboto Slab', serif;
+  }
+
+
+
+
+
 
 
 
