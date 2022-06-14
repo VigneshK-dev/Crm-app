@@ -5,11 +5,14 @@ import { BsLayoutSidebarInset, BsLightningCharge } from 'react-icons/bs';
 import { TbArrowUpRightCircle } from 'react-icons/tb';
 import { ImBlocked } from 'react-icons/im';
 import { BiPencil } from 'react-icons/bi';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CardBody, Col, Row, Card, Container } from "reactstrap";
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 import MaterialTable from "@material-table/core";
-import { Modal ,Button} from "react-bootstrap";
+import { Modal, Button } from "react-bootstrap";
+import { fetchtickets } from "../../Api/ticket";
+import { ExportCsv, ExportPdf } from "@material-table/exporters";
+import { fetchuser } from "../../Api/user";
 
 
 function Admin() {
@@ -20,6 +23,15 @@ function Admin() {
 
   //modal
   const [showmodal, setshowmodal] = useState(false)
+
+  //fetch tickets 
+
+  const [alltickets, setalltickets] = useState([])
+
+  //fetch user
+
+  const [alluser, setalluser] = useState([])
+
 
 
   const togglesidebar = () => {
@@ -35,6 +47,37 @@ function Admin() {
   const closemodal = () => {
     setshowmodal(false)
   }
+
+
+  const Gettickets = async () => {
+    fetchtickets().then(response => {
+      // console.log(response)
+      if (response.status === 200) {
+        setalltickets(response.data)
+      }
+    })
+      .catch(error => console.log(error))
+  }
+
+
+  const Getuser = async (userId) => {
+    fetchuser(userId).then(response => {
+      // console.log(response)
+      if (response.status === 200) {
+        setalluser(response.data)
+      }
+    })
+      .catch(error => console.log(error))
+  }
+
+
+  useEffect(() => {
+    let userId = localStorage.getItem("userId")
+    Gettickets()
+    Getuser(userId)
+  }, [])
+
+
 
 
   const Cards = [
@@ -85,7 +128,7 @@ function Admin() {
 
 
 
-        <div className="mb-5 mx-3">
+        <div className="mb-5 mx-3 my-2">
           <h1 className="text-dark">Welcome admin</h1>
           <p style={{ opacity: "0.5" }}>Take a quick looks at your admin stats</p>
         </div>
@@ -134,34 +177,115 @@ function Admin() {
 
         </Container>
 
-        <div style={{ marginLeft: "20px" }} className="mb-5 " >
-          <MaterialTable columns={[
-            {
-              title: "UserId",
-              field: "userId"
-            },
-            {
-              title: "Name",
-              field: "name"
-            }, {
-              title: "Status",
-              field: "status",
-              lookup: {
-                "APPROVED": "APPROVED",
-                "PENDING": "PENDING",
-                "REJECT": "REJECT"
+
+        <Container >
+
+          <div style={{ marginLeft: "20px" }}  className="mb-5 " >
+            <MaterialTable columns={[
+              {
+                title: "Id",
+                field: "id"
+              },
+              {
+                title: "Title",
+                field: "title"
+              }, {
+                title: "Description",
+                field: "description"
+              }, {
+                title: "Reporter",
+                field: "reporter"
+              },
+              {
+                title: "TicketPriority",
+                field: "ticketPriority"
+              },
+              {
+                title: "Assignee",
+                field: "assignee"
+              },
+              {
+                title: "Status",
+                field: "status",
+                lookup: {
+                  "OPEN": "OPEN",
+                  "BLOCKED": "BLOCKED",
+                  "CLOSED": "CLOSED",
+                  "IN_PROGRESS": "IN_PROGRESS"
+                }
+
               }
-            }
-          ]}
-            data={
-              [{
-                name: "VIGNESH",
-                userId: 202,
-                status: "PENDING"
-              }]
-            }
-          />
-        </div>
+
+            ]}
+              data={alltickets}
+
+              options={{
+                exportMenu: [{
+                  label: "Export Pdf",
+                  exportFunc: (cols, datas) => ExportPdf(cols, datas, "Ticket Records")
+                }, {
+                  label: "Export Csv",
+                  exportFunc: (cols, datas) => ExportCsv(cols, datas, "Ticket Records")
+                },
+
+                ],
+                headerStyle: {
+                  backgroundColor: "black",
+                  color: "white"
+                },
+
+              }}
+
+              title="TICKET RECORDS"
+            />
+          </div>
+        </Container>
+
+        <Container className="col-12">
+
+          <div style={{ marginLeft: "20px" }} className="mb-5 " >
+            <MaterialTable columns={[
+              {
+                title: "UserId",
+                field: "userId"
+              },
+              {
+                title: "Name",
+                field: "name"
+              }, {
+                title: "Email",
+                field: "email"
+              },
+              {
+                title: "UserTypes",
+                field: "userTypes",
+                lookup: {
+                  "CUSTOMER": "CUSTOMER",
+                  "ADMIN": "ADMIN",
+                  "ENGINEER": "ENGINEER",
+                }
+
+              },
+              {
+                title: "UserStatus",
+                field: "userStatus"
+              },
+             
+            ]}
+              data={alluser}
+
+              options={{
+                headerStyle: {
+                  backgroundColor: "black",
+                  color: "white"
+                },
+
+              }}
+
+              title="USER RECORDS"
+            />
+          </div>
+        </Container>
 
         <button onClick={openmodal} className="btn btn-dark mx-4">click here</button>
         <Modal show={showmodal} backdrop="static" onHide={closemodal} centered >
@@ -173,8 +297,6 @@ function Admin() {
           <Modal.Body>
 
             <form >
-
-
               <h5 className="text-dark" style={{ opacity: "0.5" }}>User ID :</h5>
               <hr />
 
@@ -189,7 +311,7 @@ function Admin() {
               </div>
 
               <div className="input-group mb-3">
-                <span className="input-group-text px-3"> Type  </span>
+                <span className="input-group-text px-3">Type</span>
                 <select className="form-select">
                   <option value={"admin"} >ADMIN</option>
                   <option value={"engineer"}>ENGINEER</option>
@@ -198,7 +320,7 @@ function Admin() {
               </div>
 
               <div className="input-group mb-3">
-                <span className="input-group-text "> Status</span>
+                <span className="input-group-text ">Status</span>
                 <select className="form-select">
                   <option value={"approved"}>APPROVED</option>
                 </select>

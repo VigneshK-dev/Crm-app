@@ -94,6 +94,7 @@
 width: 45px;
 padding: 2px 2px;
 border-radius: 5px;
+
 }
 
 .sidebar-close-icons:hover{
@@ -156,6 +157,7 @@ color: white;
   display: flex;
   justify-content: center;
   align-items: center;
+
 }
 
 .card-box:hover{
