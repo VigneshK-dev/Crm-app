@@ -1,92 +1,92 @@
 /*sidebar */
 
 /*sidebar open */
-  .sidebar-open{
-    width: 250px;
-    height: 100vh;
-    display: flex;
-    position: fixed;
-    background-color: rgb(255, 255, 255);
-    top: 0;
-    transform: translateX(-7%);
-    transition: 0.1s;
-    box-shadow: 0px 0px 25px 0.5px rgb(208, 206, 206);
-  }
+.sidebar-open{
+  width: 250px;
+  height: 100vh;
+  display: flex;
+  position: fixed;
+  background-color: rgb(255, 255, 255);
+  top: 0;
+  transform: translateX(-7%);
+  transition: 0.1s;
+  box-shadow: 0px 0px 25px 0.5px rgb(208, 206, 206);
+}
 
-  .side-brand{
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-  }
-  
-
-  
-    
-  .side-box{
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: column;
-  }
-  
-  .side-nav{
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-   border-radius: 5px;
-   padding: 0px 50px 0px 0px ;
-   transition: 0.1s ease-in;
-  }
-  
-  .sideicon{
-    font-size: 20px;
-    color: black;
-    transition: 0.1s ease-in;
-  }
-  
-  
-  .side-title{
-    color: black;
-    font-weight: 400;
-    transition: 0.1s ease-in;
-    text-decoration: none;
-  }
-  
-  
-  
-  .side-nav:hover{
-   background-color:rgb(8, 8, 9); 
-   cursor: pointer;
-  }
-  
-  
-  .side-nav:hover .side-title{
-   color: white;
-   }
-  
-  .side-nav:hover .sideicon{
-    color: white;
-    }
+.side-brand{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
 
 
-  /*sidebar close */
-  .sidebar-close{
-    width: 95px;
-    height: 100vh;
-    display: flex;
-    position: fixed;
-    top: 0;
-    background-color: rgb(255, 255, 255);
-    transform: translateX(-50%);
-   transition: 0.1s;
-   box-shadow: 0px 0px 25px 0.5px rgb(208, 206, 206);
+
+  
+.side-box{
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+
+.side-nav{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+ border-radius: 5px;
+ padding: 0px 50px 0px 0px ;
+ transition: 0.1s ease-in;
+}
+
+.sideicon{
+  font-size: 20px;
+  color: black;
+  transition: 0.1s ease-in;
+}
+
+
+.side-title{
+  color: black;
+  font-weight: 400;
+  transition: 0.1s ease-in;
+  text-decoration: none;
+}
+
+
+
+.side-nav:hover{
+ background-color:rgb(8, 8, 9); 
+ cursor: pointer;
+}
+
+
+.side-nav:hover .side-title{
+ color: white;
+ }
+
+.side-nav:hover .sideicon{
+  color: white;
   }
+
+
+/*sidebar close */
+.sidebar-close{
+  width: 95px;
+  height: 100vh;
+  display: flex;
+  position: fixed;
+  top: 0;
+  background-color: rgb(255, 255, 255);
+  transform: translateX(-50%);
+ transition: 0.1s;
+ box-shadow: 0px 0px 25px 0.5px rgb(208, 206, 206);
+}
 
 .sidebar-close h6{
-   display: none;
+ display: none;
 }
 
 .sidebar-close h5{
-  display: none;
+display: none;
 }
 
 
@@ -98,8 +98,8 @@ border-radius: 5px;
 }
 
 .sidebar-close-icons:hover{
-  background-color:rgb(8, 8, 9); 
-  cursor: pointer;
+background-color:rgb(8, 8, 9); 
+cursor: pointer;
 }
 
 .sidebar-close-icons:hover  .sideicon{
@@ -108,67 +108,65 @@ color: white;
 
 
 .toggle-icon{
-  font-size: 30px;
-  color: black;
- }
+font-size: 30px;
+color: black;
+}
 
 
 
- .active-contain{
- margin-left: 230px;
- transition: 0.1s ease-in;
- max-width: fit-content;
+.active-contain{
+margin-left: 230px;
+transition: 0.1s ease-in;
+max-width: fit-content;
 
- }
+}
 
 
- .inactive-contain{
-  margin-left: 40px;
- transition: 0.1s ease-in;
- max-width: fit-content;
+.inactive-contain{
+margin-left: 40px;
+transition: 0.1s ease-in;
+max-width: fit-content;
 }
 
 
 /*cards */
 .cards{
- width: 15rem;
- height: 10rem;
- border: none;
- border-radius: 10px;
- box-shadow: 0px 0px 25px 0.5px rgb(236, 232, 232);
- opacity: 0.7;
- transition: 0.2s ease-in-out;
- cursor: pointer;
+width: 15rem;
+height: 10rem;
+border: none;
+border-radius: 10px;
+box-shadow: 0px 0px 25px 0.5px rgb(236, 232, 232);
+opacity: 0.7;
+transition: 0.2s ease-in-out;
+cursor: pointer;
 }
 
 
 .cards:hover{
-  transform:scale(1.05);
+transform:scale(1.05);
 }
 
 
 
 .card-icon{
-  font-size: 20px;
+font-size: 20px;
 }
 
 .card-box{
-  border-radius: 8px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+border-radius: 8px;
+display: flex;
+justify-content: center;
+align-items: center;
 
 }
 
 .card-box:hover{
-  box-shadow: 0px 0px 10px 0.2px rgb(143, 140, 140);
+box-shadow: 0px 0px 10px 0.2px rgb(143, 140, 140);
 
 }
 
 .circle{
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
+display: flex;
+justify-content: space-evenly;
+align-items: center;
 }
-
-

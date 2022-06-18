@@ -43,9 +43,9 @@ function App() {
    <Route exact  path='/' element={<Login/>} />
 
 
-  {/* <Route element={<RequireAuth Roles = {[Roles.ADMIN]} />} >  */}
+  <Route element={<RequireAuth Roles = {[Roles.ADMIN]} />} > 
       <Route exact path='/Admin' element={<Admin/>} />
-  {/* </Route> */}
+  </Route>
 
   <Route element={<RequireAuth Roles = {[Roles.ENGINEER]} />} > 
       <Route exact path='/Engineer' element={<Engineer/>} />

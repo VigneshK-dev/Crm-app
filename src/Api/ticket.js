@@ -13,9 +13,20 @@ export const fetchtickets = async () =>{
   },{
       "userId":localStorage.getItem("userId")
   }
-  
-  
   )
 
     
+}
+
+
+export const updatefetchtickets = async (id,data) =>{
+  return  await axios.put(`${BASE_URL}/crm/api/v1/tickets/${id}`,data,{
+    headers:{
+        'x-access-token':localStorage.getItem("token")
+    }
+
+  },{
+      "userId":localStorage.getItem("userId")
+  }
+  )    
 }
