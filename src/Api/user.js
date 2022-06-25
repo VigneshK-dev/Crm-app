@@ -9,19 +9,17 @@ export const fetchuser = async () =>{
     headers:{
         'x-access-token':localStorage.getItem("token")
     }
-
   }
 )
     
 }
 
 
-export const updateuser = async ({userId,data}) =>{
+export const updateuser = async (userId,data) =>{
   return  await axios.put(`${BASE_URL}/crm/api/v1/users/${userId}`,data,{
     headers:{
         'x-access-token':localStorage.getItem("token")
     }
-
   },
   {
     "userId":localStorage.getItem("userId")

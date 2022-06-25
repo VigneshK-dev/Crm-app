@@ -11,6 +11,7 @@
   transform: translateX(-7%);
   transition: 0.1s;
   box-shadow: 0px 0px 25px 0.5px rgb(208, 206, 206);
+  border-radius: 20px;
 }
 
 .side-brand{
@@ -79,14 +80,17 @@
   transform: translateX(-50%);
  transition: 0.1s;
  box-shadow: 0px 0px 25px 0.5px rgb(208, 206, 206);
+ border-radius: 20px;
 }
 
 .sidebar-close h6{
  display: none;
+ transition: 0.1s;
 }
 
 .sidebar-close h5{
 display: none;
+transition: 0.1s;
 }
 
 
@@ -116,7 +120,7 @@ color: black;
 
 .active-contain{
 margin-left: 230px;
-transition: 0.1s ease-in;
+transition: 0.1s ease-in-out;
 max-width: fit-content;
 
 }
@@ -124,14 +128,14 @@ max-width: fit-content;
 
 .inactive-contain{
 margin-left: 40px;
-transition: 0.1s ease-in;
+transition: 0.1s ease-out;
 max-width: fit-content;
 }
 
 
 /*cards */
 .cards{
-width: 15rem;
+width: 14rem;
 height: 10rem;
 border: none;
 border-radius: 10px;
@@ -170,3 +174,4 @@ display: flex;
 justify-content: space-evenly;
 align-items: center;
 }
+

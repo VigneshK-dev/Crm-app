@@ -12,7 +12,9 @@ import MaterialTable from "@material-table/core";
 import { Modal, Button } from "react-bootstrap";
 import { fetchtickets, updatefetchtickets } from "../../Api/ticket";
 import { ExportCsv, ExportPdf } from "@material-table/exporters";
-import { fetchuser } from "../../Api/user";
+import { fetchuser ,updateuser } from "../../Api/user";
+import { Spinner } from 'reactstrap';
+import { ToastContainer,toast } from 'react-toastify';
 
 
 function Admin() {
@@ -22,20 +24,36 @@ function Admin() {
   //sidebar
   const [showsidebar, setsidebar] = useState(true)
 
-  //modal
-  const [showmodal, setshowmodal] = useState(false)
-
-  //fetch tickets 
-  const [alltickets, setalltickets] = useState([])
+  //user modal 
+  const [usermodal, setusermodal] = useState(false)
 
   //fetch user
   const [alluser, setalluser] = useState([])
+
+  //edit users
+  const [selectedUser, setselectedUser] = useState({})
+
+
+
+  //ticket modal
+  const [ticketmodal, setticketmodal] = useState(false)
+
+  //fetch tickets 
+  const [alltickets, setalltickets] = useState([])
 
   //edit tickets
   const [selectedTicket, setselectedTicket] = useState({})
 
   //ticket card
   const [ticketcard, setTicketcard] = useState({})
+
+
+  //loading 
+  const [loading, setloading] = useState(false)
+
+
+
+
 
   const Cards = [
     {
@@ -69,33 +87,32 @@ function Admin() {
     },
   ]
 
+  useEffect(() => {
+    // let userId = localStorage.getItem("userId")
+    Gettickets()
+    Getuser()
+  }, [])
 
+
+  //toggle side bar 
   const togglesidebar = () => {
     setsidebar(!showsidebar)
   }
 
 
-  // const openmodal = () => {
-  //   setshowmodal(true)
-  // }
-
-  const closemodal = () => {
-    setshowmodal(false)
+  //close ticket modal
+  const closeticketmodal = () => {
+    setticketmodal(false)
   }
 
 
-  const Gettickets = async () => {
-    fetchtickets().then(response => {
-      // console.log(response)
-      if (response.status === 200) {
-        setalltickets(response.data)
-        updatecard(response.data) 
-      }
-    })
-      .catch(error => console.log(error))
+  //close user modal 
+  const closeusermodal = () => {
+    setusermodal(false)
   }
 
 
+  //fetch users
   const Getuser = async () => {
     fetchuser().then(response => {
       // console.log(response)
@@ -107,11 +124,79 @@ function Admin() {
   }
 
 
-  useEffect(() => {
-    // let userId = localStorage.getItem("userId")
-    Gettickets()
-    Getuser()
-  }, [])
+  //edit user and make a copy of selected row and open modal on row click 
+  const editallusers = (data) => {
+    const users = {
+      email: data.email,
+      name: data.name,
+      userId: data.userId,
+      userStatus: data.userStatus,
+      userTypes: data.userTypes,
+    }
+    // console.log(users)
+    setselectedUser(users)
+    setusermodal(true)
+ 
+     
+
+  }
+
+ //change the value 
+  const changeUser =(e)=>{
+    if (e.target.name === "name") {
+      selectedUser.name = e.target.value
+    } else if (e.target.name === "email") {
+      selectedUser.email = e.target.value
+    } else if (e.target.name === "type") {
+      selectedUser.userTypes = e.target.value
+    } else if (e.target.name === "status") {
+      selectedUser.userStatus = e.target.value
+    }
+  updateselectedUsers(Object.assign({},selectedUser))
+  }
+ 
+  const updateselectedUsers =(data)=>{
+       setselectedUser(data)
+  }
+  
+
+  //update user 
+
+  const updateUser = (e)=>{
+    e.preventDefault()
+    setloading(true)
+    updateuser(selectedUser.userId,selectedUser)
+    .then (response =>{
+      setloading(false)
+        if(response.status === 200){
+                //  console.log(response)
+                 setusermodal(false)  
+                 return toast( "User record has been updated successfully" , {type:"success"})
+        } 
+    }).catch(error =>{
+            setloading(false)
+            console.log(error)
+            return toast(  "Oops user record not updated successfully" , {type:"error"} )  
+    })
+      
+  
+  }
+
+
+
+
+  //fetch tickets
+  const Gettickets = async () => {
+    fetchtickets().then(response => {
+      // console.log(response)
+      if (response.status === 200) {
+        setalltickets(response.data)
+        updatecard(response.data)
+      }
+    })
+      .catch(error => console.log(error))
+  }
+
 
 
 
@@ -127,7 +212,7 @@ function Admin() {
       title: data.title
     }
     setselectedTicket(tickets)
-    setshowmodal(true)
+    setticketmodal(true)
   }
 
 
@@ -135,9 +220,16 @@ function Admin() {
   const changeTicket = (e) => {
     if (e.target.name === "title") {
       selectedTicket.title = e.target.value
-    }
-    else if (e.target.name === "description") {
+    } else if (e.target.name === "description") {
       selectedTicket.description = e.target.value
+    } else if (e.target.name === "reporter") {
+      selectedTicket.reporter = e.target.value
+    } else if (e.target.name === "ticketPriority") {
+      selectedTicket.ticketPriority = e.target.value
+    } else if (e.target.name === "assignee") {
+      selectedTicket.assignee = e.target.value
+    }else if (e.target.name === "status") {
+      selectedTicket.status = e.target.value
     }
     updateselectedTickets(Object.assign({}, selectedTicket))
   }
@@ -145,23 +237,32 @@ function Admin() {
 
   const updateselectedTickets = (data) => {
     setselectedTicket(data)
+
   }
 
 
-
+  //update tickets 
   const updateTicket = (e) => {
     e.preventDefault()
+    setloading(true)
     updatefetchtickets(selectedTicket.id, selectedTicket)
       .then(response => {
-        console.log(response)
+        setloading(false)
         if (response.status === 200) {
-          setshowmodal(false)
+          // console.log(response)
+          setticketmodal(false)
+          return toast(  "Ticket record has been updated successfully" ,{type:"success"} )
         }
       })
-      .catch(err => console.log(err))
+      .catch(error => {
+        setloading(false)
+        console.log(error)
+        return toast(  " Oops Tickets record not updated successfully" ,{type:"error"} )
+      })
   }
 
 
+  // update cards 
   const updatecard = (tickets) => {
     const data = {
       pending: 0,
@@ -170,7 +271,7 @@ function Admin() {
       blocked: 0
     }
     tickets.forEach(item => {
-      if (item.status === "PENDING") {
+      if (item.status === "IN_PROGRESS") {
         data.pending++
       } else if (item.status === "OPEN") {
         data.open++
@@ -192,26 +293,33 @@ function Admin() {
     <div>
 
 
-
+      <ToastContainer position="top-center" autoClose="2000"/>
       <Sidebar state={showsidebar} />
 
-      <BsLayoutSidebarInset className="toggle-icon float-end my-2 mx-3" onClick={togglesidebar} />
 
 
       <Container className={showsidebar ? "active-contain" : "inactive-contain"} >
 
 
 
-        <div className="mb-5 mx-4 my-2">
-          <h1 className="text-dark">Welcome admin</h1>
-          <p style={{ opacity: "0.5" }}>Take a quick looks at your admin stats</p>
-        </div>
+
+        <nav className="navbar m-4" style={{ backgroundColor: "rgb(255, 255, 255)", boxShadow: "0px 0px 25px 0.5px rgb(208, 206, 206)", borderRadius: "20px" }}>
+          <div className="container-fluid ">
+            <div>
+              <h1 className="text-dark">Welcome admin</h1>
+              <p style={{ opacity: "0.5" }}>Take a quick looks at your admin stats</p>
+            </div>
+            <BsLayoutSidebarInset className="toggle-icon  float-end my-5 mx-3" onClick={togglesidebar} />
+          </div>
+
+        </nav>
 
 
-        <Container className="col-12 mb-5  ">
+
+        <Container className="col-12 mb-5" >
 
 
-          <Row className="mx-2">
+          <Row className="mx-2" >
 
 
             {Cards.map((ele, index) => (
@@ -254,8 +362,11 @@ function Admin() {
 
         <Container >
 
-          <div style={{ marginLeft: "20px" }} className="mb-5 " >
+
+
+          <div style={{ marginLeft: "20px" }} className="mb-5" >
             <MaterialTable
+              style={{ borderRadius: "10px", boxShadow: "0px 5px 25px 0.5px rgb(208, 206, 206)" }}
               onRowClick={(e, rowData) => editalltickets(rowData)}
               columns={[
                 {
@@ -317,7 +428,7 @@ function Admin() {
           </div>
 
 
-          <Modal show={showmodal} backdrop="static" onHide={closemodal} centered >
+          {ticketmodal ? (<Modal show={ticketmodal} backdrop="static" onHide={closeticketmodal} centered >
 
             <Modal.Header closeButton>
               <Modal.Title>Edit Details</Modal.Title>
@@ -329,47 +440,64 @@ function Admin() {
                 <h5 className="text-dark" style={{ opacity: "0.5" }}>Ticket ID :{selectedTicket.id}</h5>
                 <hr />
 
-                <div className="input-group mb-3">
-                  <span className="input-group-text "> Title</span>
+                <div className="input-group mb-3 ">
+                  <span className="input-group-text" style={{ paddingRight: "65px" }}>Title</span>
                   <input type="text" name="title" value={selectedTicket.title} onChange={changeTicket} className="form-control" />
                 </div>
 
 
                 <div className="input-group mb-3">
-                  <span className="input-group-text "> Description</span>
+                  <span className="input-group-text " style={{ paddingRight: "12px" }}>Description</span>
                   <input type="text" name="description" value={selectedTicket.description} onChange={changeTicket} className="form-control" />
                 </div>
 
+                <div className="input-group mb-3">
+                  <span className="input-group-text " style={{ paddingRight: "33px" }} >Reporter</span>
+                  <input type="text" name="reporter" value={selectedTicket.reporter} onChange={changeTicket} className="form-control" />
+                </div>
+
+                <div className="input-group mb-3">
+                  <span className="input-group-text " style={{ paddingRight: "30px" }}>Assignee</span>
+                  <input type="text" name="assignee" value={selectedTicket.assignee} onChange={changeTicket} className="form-control" />
+                </div>
 
 
-                {/* <div className="input-group mb-3">
-      <span className="input-group-text px-3">Type</span>
-      <select className="form-select">
-        <option value={"admin"} >ADMIN</option>
-        <option value={"engineer"}>ENGINEER</option>
-        <option value={"customer"}>CUSTOMER</option>
-      </select>
-    </div> */}
+                <div className="input-group mb-3">
+                  <span className="input-group-text ">Ticket Priority</span>
+                  <input type="text" name="ticketPriority" value={selectedTicket.ticketPriority} onChange={changeTicket} className="form-control" />
+                </div>
 
-                {/* <div className="input-group mb-3">
-      <span className="input-group-text ">Status</span>
-      <select className="form-select">
-        <option value={"approved"}>APPROVED</option>
-      </select>
-    </div> */}
 
-                <Button type="submit" variant="dark" onClick={updateTicket}>Update</Button>
+                <div className="input-group mb-3">
+                  <span className="input-group-text  "style={{ paddingRight: "53px" }}>Status</span>
+                  <select  name="status" value={selectedTicket.status} onChange={changeTicket}className="form-select">
+                    <option >OPEN</option>
+                    <option >CLOSED</option>
+                    <option >IN_PROGRESS</option>
+                    <option>BLOCKED</option>
+                  </select>
+                </div>
+
+                <Button type="submit" variant="dark" onClick={updateTicket}>
+
+                  {loading ? (
+                    <Spinner style={{ width: '1rem', height: '1rem' }} />
+                  ) : (<h6 className='my-1'>Update  </h6>)}
+
+
+                </Button>
 
               </form>
 
             </Modal.Body>
-          </Modal>
+          </Modal>) : ("")}
 
 
 
           <div style={{ marginLeft: "20px" }} className="mb-5 " >
             <MaterialTable
-
+              style={{ borderRadius: "10px", boxShadow: "0px 5px 25px 0.5px rgb(208, 206, 206)" }}
+              onRowClick={(e, rowData) => editallusers(rowData)}
               columns={[
                 {
                   title: "UserId",
@@ -401,7 +529,7 @@ function Admin() {
               data={alluser}
 
               options={{
-                filtering:true,
+                filtering: true,
                 exportMenu: [{
                   label: "Export Pdf",
                   exportFunc: (cols, rows) => ExportPdf(cols, rows, "User Records")
@@ -421,6 +549,60 @@ function Admin() {
               title="USER RECORDS"
             />
           </div>
+
+          {usermodal ? (<Modal show={usermodal} backdrop="static" onHide={closeusermodal} centered >
+
+            <Modal.Header closeButton>
+              <Modal.Title>Edit Details</Modal.Title>
+            </Modal.Header>
+
+            <Modal.Body>
+
+              <form >
+                <h5 className="text-dark" style={{ opacity: "0.5" }}>User ID :{selectedUser.userId} </h5>
+                <hr />
+
+                <div className="input-group mb-3 ">
+                  <span className="input-group-text" style={{ paddingRight: "65px" }}>Name</span>
+                 <input type="text" /*onChange={changeUser}*/ value={selectedUser.name} name="name" className="form-control" /> 
+                </div>
+
+                <div className="input-group mb-3 ">
+                  <span className="input-group-text" style={{ paddingRight: "65px" }}>Email</span>
+                  <input type="email" /*onChange={changeUser}*/ value={selectedUser.email} name="email" className="form-control" />
+                </div>
+ 
+                <div className="input-group mb-3">
+                  <span className="input-group-text " style={{ paddingRight: "70px" }}>Type</span>
+                  <select name="type" /*onChange={changeUser}*/ value={selectedUser.userTypes} className="form-select">
+                    <option >ADMIN</option>
+                    <option >CUSTOMER</option>
+                    <option >ENGINEER</option>
+                  </select>
+                </div>
+
+                <div className="input-group mb-3">
+                  <span  className="input-group-text " style={{ paddingRight: "60px" }}>Status</span>
+                  <select name="status" onChange={changeUser} value={selectedUser.userStatus} className="form-select">
+                    <option >APPROVED</option>
+                    <option >PENDING</option>
+                  </select>
+                </div>
+
+
+                <Button type="submit" variant="dark"  onClick={updateUser} >
+
+                  {loading ? (
+                    <Spinner style={{ width: '1rem', height: '1rem' }} />
+                  ) : (<h6 className='my-1'>Update  </h6>)}
+
+
+                </Button>
+
+              </form>
+
+            </Modal.Body>
+          </Modal>) : ("")}
         </Container>
 
 
